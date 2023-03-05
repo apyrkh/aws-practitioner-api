@@ -1,4 +1,5 @@
 import type { AWS } from '@serverless/typescript'
+import createProduct from '@app/functions/createProduct'
 import getProductsById from '@app/functions/getProductsById'
 import getProductsList from '@app/functions/getProductsList'
 
@@ -20,20 +21,61 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
+    iamRoleStatements: [
+      { Effect: 'Allow', Action: ['dynamodb:*'], Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/*' },
+    ]
   },
   functions: {
+    createProduct,
     getProductsById,
     getProductsList,
+  },
+  resources: {
+    Resources: {
+      productsTable: {
+        Type: 'AWS::DynamoDB::Table',
+        Properties: {
+          TableName: 'Products',
+          AttributeDefinitions: [
+            { AttributeName: 'id', AttributeType: 'S' }
+          ],
+          KeySchema: [
+            { AttributeName: 'id', KeyType: 'HASH' }
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          }
+        }
+      },
+      stocksTable: {
+        Type: 'AWS::DynamoDB::Table',
+        Properties: {
+          TableName: 'Stocks',
+          AttributeDefinitions: [
+            { AttributeName: 'product_id', AttributeType: 'S' }
+          ],
+          KeySchema: [
+            { AttributeName: 'product_id', KeyType: 'HASH' }
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          }
+        }
+      },
+    },
   },
   package: { individually: true },
   custom: {
     autoswagger: {
       title: 'AWS practitioner api: product service',
       apiType: 'http',
-      basePath: '/dev',
+      basePath: '/${sls:stage}',
       typefiles: [
         './src/types/api-types.d.ts',
         './src/types/IProduct.ts',
+        './src/types/IAvailableProduct.ts',
       ]
     },
     esbuild: {
@@ -46,6 +88,6 @@ const serverlessConfiguration: AWS = {
       concurrency: 10,
     },
   },
-};
+}
 
-module.exports = serverlessConfiguration;
+module.exports = serverlessConfiguration

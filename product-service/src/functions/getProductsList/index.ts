@@ -8,9 +8,7 @@ const getProductsListLambda: AWS['functions']['key'] = {
       http: {
         method: 'GET',
         path: 'products',
-        cors: {
-          methods: ['GET']
-        },
+        cors: true,
         // @ts-expect-error: untyped swagger config
         responseData: {
           200: {
