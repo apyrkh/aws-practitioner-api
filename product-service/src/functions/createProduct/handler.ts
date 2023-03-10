@@ -10,8 +10,12 @@ const createProductHandler: HandlerType = async (event, context) => {
   withRequest(event, context)
   logger.info(event, 'event')
 
+  const { title, description, price, count } = event.body
+  if (!title || !description || (!price && price !== 0) || (!count && count !== 0)) {
+    return formatJSONResponse(400, { message: 'Bad Request' })
+  }
+
   try {
-    const { title, description, price, count } = event.body
     const createdProduct = await productService.createProduct({ title, description, price, count })
 
     return formatJSONResponse(201, createdProduct)
