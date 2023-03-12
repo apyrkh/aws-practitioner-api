@@ -2,6 +2,7 @@ import { main } from './handler'
 import productService from '@app/store/productService'
 
 jest.mock('@app/store/productService')
+jest.mock('@app/utils/logger')
 
 describe('function getProductList', () => {
   const mockedProductService = jest.mocked(productService)

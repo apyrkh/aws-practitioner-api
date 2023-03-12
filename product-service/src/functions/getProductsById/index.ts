@@ -8,9 +8,7 @@ const getProductsByIdLambda: AWS['functions']['key'] = {
       http: {
         method: 'GET',
         path: 'products/{productId}',
-        cors: {
-          methods: ['GET']
-        },
+        cors: true,
         request: {
           parameters: {
             paths: {
@@ -24,7 +22,7 @@ const getProductsByIdLambda: AWS['functions']['key'] = {
             bodyType: 'GetProductsByIdResponse',
           },
           404: {
-            bodyType: 'GetProductsByIdResponse404'
+            bodyType: 'NotFoundResponse'
           },
           500: {
             bodyType: 'InternalServerErrorResponse'

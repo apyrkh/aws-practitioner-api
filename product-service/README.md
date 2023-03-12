@@ -11,6 +11,7 @@ Depending on your preferred package manager, follow the instructions below to de
 - Run `npm i` to install the project dependencies
 - Run `npm test` to run tests
 - Run `serverless:deploy` to deploy this stack to AWS
+- Run `serverless:offline` to deploy locally
 - Run `serverless:remove` to remove this stack to AWS
 
 ## Test your service
