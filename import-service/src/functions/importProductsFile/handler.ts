@@ -5,7 +5,7 @@ import productsImportService from '@app/services/ProductsImportService'
 
 const createImportProductsFileHandler: ValidatedEventAPIGatewayProxyEvent<never> = async (event, context) => {
   withRequest(event, context)
-  logger.info(event, 'event1')
+  logger.info(event, 'event')
 
   const name = event.queryStringParameters?.name
   if (!name) {

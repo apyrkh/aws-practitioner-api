@@ -1,2 +1,4 @@
+.esbuild
 .serverless
 node_modules
+swagger
