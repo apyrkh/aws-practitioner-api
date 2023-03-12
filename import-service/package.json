@@ -5,7 +5,8 @@
   "scripts": {
     "sls:deploy": "sls deploy",
     "sls:offline": "sls offline start --httpPort 4000 --stage dev",
-    "sls:remove": "sls remove"
+    "sls:remove": "sls remove",
+    "test": "jest"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -20,8 +21,11 @@
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
     "@types/aws-lambda": "^8.10.71",
+    "@types/jest": "^29.4.0",
     "@types/node": "^14.14.25",
     "esbuild": "^0.14.11",
+    "esbuild-jest": "^0.5.0",
+    "jest": "^29.4.3",
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^3.0.0",
     "serverless-auto-swagger": "^2.12.0",
