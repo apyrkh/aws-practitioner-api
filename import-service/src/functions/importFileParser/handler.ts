@@ -7,7 +7,7 @@ const importFileParserHandler: S3Handler = async (event, context) => {
   logger.info(event, 'event')
 
   for (let record of event.Records) {
-    await productsImportService.parseUploadedFile(record.s3.object.key)
+    await productsImportService.processUploadedFile(record.s3.object.key)
   }
 }
 
