@@ -1,6 +1,6 @@
 import { S3 } from 'aws-sdk'
 import csv from 'csv-parser'
-import { BUCKET_NAME, PARSED_BUCKET, UPLOAD_FOLDER_NAME } from '@app/constants'
+import { BUCKET_NAME, PARSED_FOLDER_NAME, UPLOAD_FOLDER_NAME } from '@app/constants'
 import { logger } from '@app/utils/logger'
 
 class ProductsImportService {
@@ -18,7 +18,7 @@ class ProductsImportService {
   }
 
   parseUploadedFile = (filePath: string) => {
-    const parsedFilePath = filePath.replace(UPLOAD_FOLDER_NAME, PARSED_BUCKET)
+    const parsedFilePath = filePath.replace(UPLOAD_FOLDER_NAME, PARSED_FOLDER_NAME)
 
     return new Promise((resolve, reject) => {
       const s3Stream = this.s3.getObject({
