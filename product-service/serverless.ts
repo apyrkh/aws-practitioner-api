@@ -8,6 +8,7 @@ const serverlessConfiguration: AWS = {
   service: 'product-service',
   frameworkVersion: '3',
   plugins: ['serverless-auto-swagger', 'serverless-esbuild', 'serverless-offline'],
+  useDotenv: true,
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -21,6 +22,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      CREATE_PRODUCT_SNS_TOPIC_ARN: { Ref: 'CreateProductTopic' },
     },
     iamRoleStatements: [
       {
@@ -31,9 +33,12 @@ const serverlessConfiguration: AWS = {
       {
         Effect: 'Allow',
         Action: ['sqs:*'],
-        Resource: {
-          'Fn::GetAtt': ['CatalogItemsQueue', 'Arn']
-        }
+        Resource: { 'Fn::GetAtt': ['CatalogItemsQueue', 'Arn'] }
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sns:*'],
+        Resource: { Ref: 'CreateProductTopic' }
       },
     ]
   },
@@ -53,7 +58,7 @@ const serverlessConfiguration: AWS = {
         }
       },
       CatalogItemsQueueUrl: {
-        Value: { 'Ref': 'CatalogItemsQueue' },
+        Value: { Ref: 'CatalogItemsQueue' },
         Description: 'SQS will be used by other stacks',
         Export: {
           Name: '${self:service}-${self:provider.stage}-CatalogItemsQueueUrl'
@@ -99,6 +104,21 @@ const serverlessConfiguration: AWS = {
           QueueName: 'catalog-items-queue'
         },
       },
+      CreateProductTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'create-product-topic'
+        }
+      },
+      CreateProductTopicSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: process.env.CREATE_PRODUCT_SUBSCRIPTION_EMAIL,
+          Protocol: 'email',
+          TopicArn: { Ref: 'CreateProductTopic' }
+          // TopicArn: { 'Fn::GetAtt': ['CreateProductTopic', 'Arn'] }
+        }
+      }
     },
   },
   package: { individually: true },

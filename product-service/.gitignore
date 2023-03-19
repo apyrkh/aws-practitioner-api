@@ -2,3 +2,6 @@
 .serverless
 node_modules
 swagger
+
+# files
+.env.*
