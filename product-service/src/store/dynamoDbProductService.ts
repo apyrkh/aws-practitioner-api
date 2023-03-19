@@ -63,7 +63,13 @@ class DynamoDbProductService implements IProductService {
         Subject: `New product created: ${product.title}`,
         Message: `New product has been created
 ${JSON.stringify(product, null, 2)}
-`
+`,
+        MessageAttributes: {
+          price: {
+            DataType: 'Number',
+            StringValue: `${product.price}`
+          }
+        }
       }).promise()
     } catch (e) {
       logger.error(e)

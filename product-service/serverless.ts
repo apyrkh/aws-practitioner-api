@@ -118,7 +118,18 @@ const serverlessConfiguration: AWS = {
           TopicArn: { Ref: 'CreateProductTopic' }
           // TopicArn: { 'Fn::GetAtt': ['CreateProductTopic', 'Arn'] }
         }
-      }
+      },
+      CreateProductHighPriceTopicSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: process.env.CREATE_PRODUCT_HIGH_PRICE_SUBSCRIPTION_EMAIL,
+          Protocol: 'email',
+          TopicArn: { Ref: 'CreateProductTopic' },
+          FilterPolicy: {
+            price: [{ numeric: ['>=', 1000] }]
+          }
+        }
+      },
     },
   },
   package: { individually: true },
