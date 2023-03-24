@@ -113,7 +113,7 @@ const serverlessConfiguration: AWS = {
       CreateProductTopicSubscription: {
         Type: 'AWS::SNS::Subscription',
         Properties: {
-          Endpoint: process.env.CREATE_PRODUCT_SUBSCRIPTION_EMAIL,
+          Endpoint: '${env:CREATE_PRODUCT_SUBSCRIPTION_EMAIL}',
           Protocol: 'email',
           TopicArn: { Ref: 'CreateProductTopic' }
           // TopicArn: { 'Fn::GetAtt': ['CreateProductTopic', 'Arn'] }
@@ -122,7 +122,7 @@ const serverlessConfiguration: AWS = {
       CreateProductHighPriceTopicSubscription: {
         Type: 'AWS::SNS::Subscription',
         Properties: {
-          Endpoint: process.env.CREATE_PRODUCT_HIGH_PRICE_SUBSCRIPTION_EMAIL,
+          Endpoint: '${env:CREATE_PRODUCT_HIGH_PRICE_SUBSCRIPTION_EMAIL}',
           Protocol: 'email',
           TopicArn: { Ref: 'CreateProductTopic' },
           FilterPolicy: {
