@@ -1,0 +1,14 @@
+{
+  "name": "authorization-service",
+  "version": "1.0.0",
+  "scripts": {
+    "sls:deploy": "sls deploy",
+    "sls:remove": "sls remove"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.0.0"
+  }
+}

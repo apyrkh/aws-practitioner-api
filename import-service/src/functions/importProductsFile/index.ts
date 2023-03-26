@@ -16,6 +16,15 @@ const importProductsFileLambda: AWS['functions']['key'] = {
             }
           }
         },
+        authorizer: {
+          name: 'basicAuthorizer',
+          arn: {
+            'Fn::ImportValue': 'authorization-service-${self:provider.stage}-BasicAuthorizerFunctionArn'
+          },
+          resultTtlInSeconds: 0,
+          identitySource: 'method.request.header.Authorization',
+          type: 'token',
+        },
         // @ts-expect-error: untyped swagger config
         responseData: {
           200: {
