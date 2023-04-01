@@ -1,6 +1,7 @@
-import { IProduct } from '@app/types/IProduct'
+const AWS = require('aws-sdk')
+const dynamo = new AWS.DynamoDB.DocumentClient()
 
-export const products: IProduct[] = [
+const availableProducts = [
   {
     id: '590e9eae-6381-41c7-b7d7-df065616f22c',
     title: 'CloudX: AWS Practitioner for JS',
@@ -51,3 +52,29 @@ export const products: IProduct[] = [
     count: 5,
   },
 ]
+
+const products = availableProducts.map(({ count, ...product }) => product)
+const stocks = availableProducts.map(({ id, count }) => ({ product_id: id, count }))
+
+const createProduct = async (product) => {
+  return dynamo.put({
+    TableName: 'Products',
+    Item: product
+  }).promise()
+}
+
+const createStock = async (stock) => {
+  return dynamo.put({
+    TableName: 'Stocks',
+    Item: stock
+  }).promise()
+}
+
+exports.handler = async (event) => {
+  try {
+    await Promise.all(products.map(it => createProduct(it)))
+    await Promise.all(stocks.map(it => createStock(it)))
+  } catch (e) {
+    console.log(e)
+  }
+}

@@ -1,14 +1,3 @@
-import { products } from '@app/store/mocks/products'
-import { IProduct } from '@app/types/IProduct'
+import dynamoDbProductService from '@app/store/dynamoDbProductService'
 
-class ProductService {
-  getProductList = async () => {
-    return products
-  }
-
-  getProductById = async (id: string): Promise<IProduct | null> => {
-    return products.find(it => it.id === id) || null
-  }
-}
-
-export default new ProductService()
+export default dynamoDbProductService
