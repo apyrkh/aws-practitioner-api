@@ -20,6 +20,9 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      PROCESS_PRODUCT_SQS_URL: {
+        'Fn::ImportValue': 'product-service-dev-CatalogItemsQueueUrl'
+      },
     },
     iamRoleStatements: [
       {
@@ -31,6 +34,13 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: 's3:*',
         Resource: `arn:aws:s3:::${BUCKET_NAME}/*`
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sqs:*'],
+        Resource: {
+          'Fn::ImportValue': 'product-service-dev-CatalogItemsQueueArn'
+        }
       },
     ]
   },

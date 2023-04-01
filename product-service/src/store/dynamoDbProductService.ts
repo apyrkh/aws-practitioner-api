@@ -1,12 +1,16 @@
-import { DynamoDB } from 'aws-sdk'
+import { DynamoDB, SNS } from 'aws-sdk'
+import { CREATE_PRODUCT_SNS_TOPIC_ARN } from '@app/constants'
 import { IProductService } from '@app/types/IProductService'
 import { IAvailableProduct } from '@app/types/IAvailableProduct'
 import { IProduct } from '@app/types/IProduct'
 import { IStock } from '@app/types/IStock'
+import { logger } from '@app/utils/logger'
 import { uuid } from '@app/utils/uuid'
 
 class DynamoDbProductService implements IProductService {
+  sns = new SNS()
   dynamo = new DynamoDB.DocumentClient()
+
   stocksTableName = 'Stocks'
   productsTableName = 'Products'
 
@@ -36,22 +40,40 @@ class DynamoDbProductService implements IProductService {
     const product: IProduct = { id: uuid(), title, description, price }
     const stock: IStock = { product_id: product.id, count: count }
 
-    await this.dynamo.transactWrite({
-      TransactItems: [
-        {
-          Put: {
-            TableName: 'Products',
-            Item: product
+    try {
+      await this.dynamo.transactWrite({
+        TransactItems: [
+          {
+            Put: {
+              TableName: 'Products',
+              Item: product
+            },
           },
-        },
-        {
-          Put: {
-            TableName: 'Stocks',
-            Item: stock
+          {
+            Put: {
+              TableName: 'Stocks',
+              Item: stock
+            }
+          }
+        ]
+      }).promise()
+
+      await this.sns.publish({
+        TopicArn: CREATE_PRODUCT_SNS_TOPIC_ARN,
+        Subject: `New product created: ${product.title}`,
+        Message: `New product has been created
+${JSON.stringify(product, null, 2)}
+`,
+        MessageAttributes: {
+          price: {
+            DataType: 'Number',
+            StringValue: `${product.price}`
           }
         }
-      ]
-    }).promise()
+      }).promise()
+    } catch (e) {
+      logger.error(e)
+    }
 
     return this.getProductById(product.id)
   }
