@@ -1,0 +1,26 @@
+service: card-service
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: "eu-west-1"
+  stage: dev
+  profile: apyrkh_aws_practitioner
+
+functions:
+  main:
+    handler: dist/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
