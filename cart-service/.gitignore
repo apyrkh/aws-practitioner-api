@@ -39,4 +39,4 @@ lerna-debug.log*
 !.elasticbeanstalk/*.global.yml
 
  # files
- .env.*
+.env.*

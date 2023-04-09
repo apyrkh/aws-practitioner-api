@@ -1,5 +1,5 @@
 {
-  "name": "rs-checkout-api",
+  "name": "cart-service",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -30,6 +30,7 @@
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.5.1",
+    "@nestjs/typeorm": "^7.1.5",
     "@vendia/serverless-express": "^4.10.1",
     "aws-lambda": "^1.0.7",
     "helmet": "^4.2.0",
@@ -37,8 +38,11 @@
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.4",
+    "typeorm": "^0.2.45",
+    "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
