@@ -6,7 +6,6 @@ import { AppRequest, getUserIdFromRequest } from '../shared';
 
 import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
-import { CartStatus } from '../database/entities/cart.entity';
 
 @Controller('api/profile/cart')
 export class CartController {
@@ -80,16 +79,15 @@ export class CartController {
       cartId,
       payment: {
         type: 'credit',
-        address: body.address
+        address: body.address,
       },
       delivery: {
         type: 'free',
-        address: body.address
+        address: body.address,
       },
       comments: body.comments,
       total,
     });
-    await this.cartService.update(userId, { status: CartStatus.ORDERED });
 
     return {
       statusCode: HttpStatus.OK,

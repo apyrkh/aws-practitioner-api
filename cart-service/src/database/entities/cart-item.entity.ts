@@ -13,6 +13,7 @@ export class CartItem {
 
   @ManyToOne(() => Product, {
     primary: true,
+    eager: true,
   })
   product: Product;
 
